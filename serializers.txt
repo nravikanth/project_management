@@ -1,0 +1,38 @@
+from app1.views import Comment
+comment = Comment(email='leila@example.com', content='foo bar')
+from app1.serializers import CommentSerializer
+serializer = CommentSerializer(comment)
+serializer.data
+from rest_framework.renderers import JSONRenderer
+json = JSONRenderer().render(serializer.data)
+json
+
+from django.utils.six import BytesIO
+from rest_framework.parsers import JSONParser
+
+stream = BytesIO(json)
+data = JSONParser().parse(stream)
+serializer = CommentSerializer(data=data)
+serializer.is_valid()
+# True
+serializer.validated_data
+
+
+========================
+from todo_app.models import TodoDetail
+from rest_framework.renderers import JSONRenderer
+from django.utils.six import BytesIO
+from rest_framework.parsers import JSONParser
+
+obj=TodoDetail.objects.all()
+from todo_app.serializer import TodoSerializer
+serializer = TodoSerializer(obj, many=True)
+json = JSONRenderer().render(serializer.data)
+json
+
+stream = BytesIO(json)
+data = JSONParser().parse(stream)
+serializer = TodoSerializer(data=data)
+serializer.is_valid()
+
+
